@@ -1,0 +1,44 @@
+{
+  "services": [
+    {
+      "id": "svc-042",
+      "name": "payment-api",
+      "tier": "critical",
+      "dora_regulated": true,
+      "owner_team": "payments-team",
+      "last_validated_at": "2026-04-01T10:00:00Z"
+    },
+    {
+      "id": "svc-017",
+      "name": "fraud-check",
+      "tier": "critical",
+      "dora_regulated": true,
+      "owner_team": "risk-team",
+      "last_validated_at": "2026-04-01T10:00:00Z"
+    },
+    {
+      "id": "svc-089",
+      "name": "notification-service",
+      "tier": "standard",
+      "dora_regulated": false,
+      "owner_team": "platform-team",
+      "last_validated_at": "2026-04-01T10:00:00Z"
+    },
+    {
+      "id": "svc-101",
+      "name": "internal-dashboard",
+      "tier": "non-critical",
+      "dora_regulated": false,
+      "owner_team": "platform-team",
+      "last_validated_at": "2026-04-01T10:00:00Z"
+    },
+    {
+      "id": "svc-055",
+      "name": "marketing-site",
+      "tier": "non-critical",
+      "dora_regulated": false,
+      "owner_team": "marketing-eng",
+      "last_validated_at": "2026-04-01T10:00:00Z"
+    }
+  ]
+}

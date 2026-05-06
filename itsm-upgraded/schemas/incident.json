@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IncidentTicket",
+  "description": "An incident ticket. Canonical definition used by the Incident Management Context Layer.",
+  "version": "1.0.0",
+  "owner": "Service Desk / On-Call Team",
+  "type": "object",
+  "required": ["id", "title", "reported_by", "reported_at", "affected_cis", "symptoms", "impact"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^INC-[0-9]+$" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "reported_by": { "type": "string" },
+    "reported_at": { "type": "string", "format": "date-time" },
+    "affected_cis": { "type": "array", "items": { "type": "string" } },
+    "symptoms": { "type": "array", "items": { "type": "string" } },
+    "impact": { "type": "string", "enum": ["full_outage", "partial_degradation", "minor_degradation", "unknown"] },
+    "priority_declared": { "type": ["string", "null"], "enum": ["P1", "P2", "P3", "P4", null] }
+  }
+}

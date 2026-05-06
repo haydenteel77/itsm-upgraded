@@ -1,0 +1,58 @@
+{
+  "incidents": [
+    {
+      "id": "INC-4421",
+      "title": "Payment API TLS handshake failure — partial outage",
+      "description": "Payment API returning SSL errors intermittently. 12% of transactions failing at TLS handshake.",
+      "reported_by": "alice.engineer",
+      "reported_at": "2026-01-15T11:30:00Z",
+      "resolved_at": "2026-01-15T13:45:00Z",
+      "affected_services": ["svc-042"],
+      "affected_cis": ["ci-payment-tls", "ci-payment-lb-01"],
+      "priority": "P1",
+      "status": "resolved",
+      "root_cause": "DNS propagation delay post cert rotation — OCSP stapling misconfigured",
+      "linked_known_error": "KE-001",
+      "linked_rfc": "RFC-8901",
+      "resolution_time_minutes": 135,
+      "impact_summary": "12% transaction failure rate, ~$47k revenue impact",
+      "assigned_team": "payments-team"
+    },
+    {
+      "id": "INC-4388",
+      "title": "Notification service DB connection pool exhausted — cascading impact to payment-api",
+      "description": "Notification service hitting DB connection limit under Black Friday load. Causing downstream timeouts in payment-api checkout flow.",
+      "reported_by": "ops-monitoring",
+      "reported_at": "2026-03-10T08:00:00Z",
+      "resolved_at": "2026-03-10T08:47:00Z",
+      "affected_services": ["svc-089", "svc-042"],
+      "affected_cis": ["ci-notification-db"],
+      "priority": "P2",
+      "status": "resolved",
+      "root_cause": "PgBouncer pool size (20) insufficient for peak load. No circuit breaker in payment-api downstream call.",
+      "linked_known_error": "KE-002",
+      "linked_rfc": null,
+      "resolution_time_minutes": 47,
+      "impact_summary": "Checkout flow degraded for 47 minutes. ~3% of orders affected.",
+      "assigned_team": "platform-team"
+    },
+    {
+      "id": "INC-4502",
+      "title": "Internal dashboard — users unable to login (ACTIVE)",
+      "description": "internal-dashboard showing HTTP 503 for all users. Load balancer health checks failing. On-call alerted.",
+      "reported_by": "ops-monitoring",
+      "reported_at": "2026-04-22T08:15:00Z",
+      "resolved_at": null,
+      "affected_services": ["svc-101"],
+      "affected_cis": ["ci-dashboard-tls"],
+      "priority": "P2",
+      "status": "active",
+      "root_cause": null,
+      "linked_known_error": null,
+      "linked_rfc": null,
+      "resolution_time_minutes": null,
+      "impact_summary": "All internal-dashboard users locked out. Engineering teams unable to access deployment dashboards.",
+      "assigned_team": "platform-team"
+    }
+  ]
+}

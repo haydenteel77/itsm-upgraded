@@ -1,0 +1,52 @@
+{
+  "known_errors": [
+    {
+      "id": "KE-001",
+      "title": "Payment API TLS Handshake Failure",
+      "description": "TLS negotiation fails when a cert is within 7 days of expiry on payment-api. Root cause: misconfigured OCSP stapling on the load balancer.",
+      "affected_services": ["svc-042"],
+      "symptoms": ["tls handshake", "ssl error", "certificate expired", "connection refused", "handshake timeout"],
+      "workaround": "Manually force cert rotation via the certificate pipeline (RFC fast-track). OCSP stapling must be toggled off and back on post-rotation.",
+      "permanent_fix": "RFC-9812 or equivalent — update load balancer OCSP config to version 3.2.",
+      "status": "workaround_available",
+      "linked_incident": "INC-4421",
+      "created_at": "2026-01-15T12:00:00Z"
+    },
+    {
+      "id": "KE-002",
+      "title": "Notification Service DB Connection Pool Exhaustion",
+      "description": "Under high load (>2000 req/min) the notification-service exhausts its Postgres connection pool. Manifests as 500 errors and cascading timeouts into payment-api.",
+      "affected_services": ["svc-089", "svc-042"],
+      "symptoms": ["connection pool exhausted", "database timeout", "db connection", "500 error", "postgres", "notification", "downstream timeout"],
+      "workaround": "Restart the notification-service pod (kubectl rollout restart). Reduces load within 60 seconds.",
+      "permanent_fix": "Increase PgBouncer pool size from 20 to 50 and enable pgpool-II (requires CAB approval).",
+      "status": "workaround_available",
+      "linked_incident": "INC-4388",
+      "created_at": "2026-03-10T08:30:00Z"
+    },
+    {
+      "id": "KE-003",
+      "title": "Fraud Check Service Stale CMDB Edges",
+      "description": "CMDB edges for fraud-check (svc-017) have not been verified since Feb 2026. Any automated tooling relying on CMDB for fraud-check will refuse to act.",
+      "affected_services": ["svc-017"],
+      "symptoms": ["stale data", "low confidence", "cmdb", "fraud", "refused", "unverified"],
+      "workaround": "Submit a CMDB refresh request to the platform team (Service Request SR category). Expected SLA: 2 business days.",
+      "permanent_fix": "Automate CMDB edge verification via discovery tool (Project ID: DISC-2026-04).",
+      "status": "workaround_available",
+      "linked_incident": null,
+      "created_at": "2026-04-01T09:00:00Z"
+    },
+    {
+      "id": "KE-004",
+      "title": "Marketing Site 502 During Deployments",
+      "description": "marketing-site (svc-055) returns 502 for ~30 seconds during rolling deployments due to a missing readiness probe.",
+      "affected_services": ["svc-055"],
+      "symptoms": ["502", "bad gateway", "deployment", "marketing", "rolling update", "unavailable"],
+      "workaround": "Disable the CDN cache for marketing-site 5 minutes before any deployment. Re-enable after health checks pass.",
+      "permanent_fix": "Add a proper Kubernetes readiness probe (PR already merged, pending release train).",
+      "status": "permanent_fix_pending",
+      "linked_incident": null,
+      "created_at": "2026-02-20T11:00:00Z"
+    }
+  ]
+}

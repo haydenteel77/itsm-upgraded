@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Service",
+  "description": "A business service. Canonical definition used across Change, Incident, and Problem Management.",
+  "version": "1.0.0",
+  "owner": "Platform Engineering Lead",
+  "type": "object",
+  "required": ["id", "name", "tier", "dora_regulated", "owner_team"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^svc-[0-9]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["critical", "standard", "non-critical"],
+      "description": "Business criticality tier"
+    },
+    "dora_regulated": {
+      "type": "boolean",
+      "description": "Is this service in scope for DORA? Source: compliance-owned list, updated quarterly"
+    },
+    "owner_team": {
+      "type": "string"
+    },
+    "last_validated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Freshness stamp. Older than 30 days -> classification refuses"
+    }
+  }
+}

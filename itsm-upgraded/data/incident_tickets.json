@@ -1,0 +1,48 @@
+{
+  "incident_tickets": [
+    {
+      "id": "INC-4510",
+      "title": "payment-api returning 500 errors — users unable to checkout",
+      "description": "Multiple customers reporting checkout failures. payment-api returning HTTP 500. Error logs show SSL handshake timeout. Started approximately 09:05 UTC.",
+      "reported_by": "ops-monitoring",
+      "reported_at": "2026-04-22T09:05:00Z",
+      "affected_cis": ["ci-payment-tls", "ci-payment-lb-01"],
+      "symptoms": ["500 error", "ssl error", "tls handshake", "checkout failure"],
+      "impact": "full_outage",
+      "priority_declared": null
+    },
+    {
+      "id": "INC-4511",
+      "title": "notification-service degraded — downstream timeout in checkout",
+      "description": "Notification service responding slowly. DB connection errors in logs. payment-api checkout flow timing out when calling notification-service. Affecting ~8% of transactions.",
+      "reported_by": "bob.engineer",
+      "reported_at": "2026-04-22T10:15:00Z",
+      "affected_cis": ["ci-notification-pod"],
+      "symptoms": ["downstream timeout", "notification", "db connection", "connection pool exhausted"],
+      "impact": "partial_degradation",
+      "priority_declared": "P2"
+    },
+    {
+      "id": "INC-4512",
+      "title": "internal-dashboard login page returns 404",
+      "description": "A few users reporting the internal dashboard login page returns 404. Appears intermittent — not all users affected. No monitoring alert triggered.",
+      "reported_by": "frank.analyst",
+      "reported_at": "2026-04-22T11:30:00Z",
+      "affected_cis": ["ci-dashboard-tls"],
+      "symptoms": ["404", "login", "dashboard", "intermittent"],
+      "impact": "minor_degradation",
+      "priority_declared": null
+    },
+    {
+      "id": "INC-4513",
+      "title": "fraud-check service unreachable from payment-api",
+      "description": "payment-api reporting upstream call to fraud-check timing out. No errors in fraud-check logs directly. Possible network partition.",
+      "reported_by": "carol.engineer",
+      "reported_at": "2026-04-22T12:00:00Z",
+      "affected_cis": ["ci-fraud-tls"],
+      "symptoms": ["unreachable", "timeout", "fraud", "network"],
+      "impact": "full_outage",
+      "priority_declared": null
+    }
+  ]
+}

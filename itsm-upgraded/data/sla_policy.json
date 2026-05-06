@@ -1,0 +1,72 @@
+{
+  "priority_definitions": {
+    "P1": {
+      "label": "Critical",
+      "description": "Complete service outage or critical-function unavailable. Revenue or regulatory impact.",
+      "initial_response_minutes": 5,
+      "resolution_target_minutes": 60,
+      "escalation_path": ["on-call-engineer", "team-lead", "VP-Engineering", "CTO"],
+      "requires_war_room": true,
+      "notify_stakeholders": true
+    },
+    "P2": {
+      "label": "High",
+      "description": "Significant degradation. Core function impaired but not fully down. Customer-facing impact.",
+      "initial_response_minutes": 15,
+      "resolution_target_minutes": 240,
+      "escalation_path": ["on-call-engineer", "team-lead"],
+      "requires_war_room": false,
+      "notify_stakeholders": true
+    },
+    "P3": {
+      "label": "Medium",
+      "description": "Non-critical function impaired. Workaround available. No direct revenue impact.",
+      "initial_response_minutes": 60,
+      "resolution_target_minutes": 1440,
+      "escalation_path": ["on-call-engineer"],
+      "requires_war_room": false,
+      "notify_stakeholders": false
+    },
+    "P4": {
+      "label": "Low",
+      "description": "Cosmetic or minor issue. No functional impact. Schedule for next sprint.",
+      "initial_response_minutes": 480,
+      "resolution_target_minutes": 10080,
+      "escalation_path": ["team-queue"],
+      "requires_war_room": false,
+      "notify_stakeholders": false
+    }
+  },
+  "escalation_rules": [
+    {
+      "rule_id": "ESC-DORA",
+      "condition": "service.dora_regulated == true",
+      "action": "Always escalate to P1 minimum. Notify compliance officer within 30 minutes.",
+      "mandatory": true
+    },
+    {
+      "rule_id": "ESC-TIER-CRITICAL",
+      "condition": "service.tier == 'critical' AND impact == 'full_outage'",
+      "action": "Auto-escalate to P1. Page on-call immediately.",
+      "mandatory": true
+    },
+    {
+      "rule_id": "ESC-BREACH",
+      "condition": "elapsed_minutes > sla.initial_response_minutes AND status == 'open'",
+      "action": "SLA breach imminent — escalate to next tier in escalation_path.",
+      "mandatory": true
+    },
+    {
+      "rule_id": "ESC-CASCADE",
+      "condition": "affected_services.count > 2",
+      "action": "Incident affects multiple services — escalate to P2 minimum, open war room.",
+      "mandatory": false
+    }
+  ],
+  "on_call_schedule": {
+    "payments-team": "bob.engineer",
+    "risk-team": "carol.engineer",
+    "platform-team": "dave.engineer",
+    "marketing-eng": "erin.engineer"
+  }
+}

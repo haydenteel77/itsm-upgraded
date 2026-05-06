@@ -1,0 +1,134 @@
+[
+  {
+    "id": "SOP-DB-FAILOVER",
+    "name": "Database Primary Failover",
+    "applies_to_categories": ["availability"],
+    "applies_to_tiers": [1, 2],
+    "keyword_signals": ["database", "postgres", "db", "connection pool", "primary", "replica", "failover", "replication lag"],
+    "steps": [
+      "Page the on-call DBA immediately via PagerDuty.",
+      "Open the #incident-response Slack channel and post initial update.",
+      "Check replication lag on replica nodes via monitoring dashboard.",
+      "If primary is unreachable, initiate automatic failover using pg_auto_failover or manual promotion.",
+      "Verify application services can connect to the new primary.",
+      "Confirm payment processing resumed by checking transaction throughput.",
+      "Post-recovery: capture WAL logs and schedule RCA within 24 hours."
+    ],
+    "auto_page_on_match": true,
+    "requires_war_room": true
+  },
+  {
+    "id": "SOP-API-DEGRADED",
+    "name": "API Service Degradation Response",
+    "applies_to_categories": ["availability", "performance"],
+    "applies_to_tiers": [1, 2, 3],
+    "keyword_signals": ["api", "5xx", "latency", "timeout", "response time", "throughput", "error rate", "requests failing", "slow"],
+    "steps": [
+      "Acknowledge the alert in PagerDuty and open an incident bridge.",
+      "Check the API gateway metrics for error rate, latency p99, and request volume.",
+      "Determine if degradation is upstream (dependency) or local (service itself).",
+      "If upstream: notify the owning team and add to dependency health tracker.",
+      "If local: check pod health in Kubernetes, review recent deployments.",
+      "If recent deployment is suspect: trigger rollback procedure via CI/CD pipeline.",
+      "Communicate status to stakeholders via status page update.",
+      "Resolve and log actions in incident record."
+    ],
+    "auto_page_on_match": true,
+    "requires_war_room": false
+  },
+  {
+    "id": "SOP-SECURITY-BREACH",
+    "name": "Security Incident Response",
+    "applies_to_categories": ["security"],
+    "applies_to_tiers": [1, 2, 3, 4],
+    "keyword_signals": ["breach", "unauthorized", "intrusion", "malware", "ransomware", "exfil", "data leak", "credential", "phishing", "exploit", "vulnerability", "attack"],
+    "steps": [
+      "IMMEDIATELY page the Security Operations Center (SOC) on-call.",
+      "Do NOT attempt remediation without SOC authorization — evidence preservation is critical.",
+      "Isolate affected systems from network if SOC confirms active breach.",
+      "Preserve all logs: system, application, network, and access logs.",
+      "Notify CISO and Legal within 15 minutes of confirmed breach.",
+      "Activate the Security Incident Response Plan (SIRP).",
+      "Assess if PCI-DSS, HIPAA, or SOX notification obligations apply.",
+      "Do not communicate breach externally without Legal approval.",
+      "Begin chain-of-custody documentation for all forensic evidence."
+    ],
+    "auto_page_on_match": true,
+    "requires_war_room": true
+  },
+  {
+    "id": "SOP-FRAUD-SPIKE",
+    "name": "Fraud Detection Anomaly Response",
+    "applies_to_categories": ["security", "availability"],
+    "applies_to_tiers": [1, 2],
+    "keyword_signals": ["fraud", "false positive", "false negative", "model", "detection rate", "rules engine", "transaction score", "suspicious"],
+    "steps": [
+      "Page risk-engineering on-call and fraud analyst on-call simultaneously.",
+      "Pull current fraud rate metrics from the fraud dashboard.",
+      "Determine if the anomaly is model degradation, data feed issue, or true fraud spike.",
+      "If model degradation: switch to fallback rule-based engine while model is retrained.",
+      "If data feed issue: identify the broken upstream and apply last-known-good cache.",
+      "If true fraud spike: notify compliance team and activate manual review queue.",
+      "Document all suspicious transaction IDs for forensic review.",
+      "Do not modify model thresholds without risk committee approval."
+    ],
+    "auto_page_on_match": true,
+    "requires_war_room": true
+  },
+  {
+    "id": "SOP-DATA-CORRUPTION",
+    "name": "Data Integrity Incident Response",
+    "applies_to_categories": ["data"],
+    "applies_to_tiers": [1, 2],
+    "keyword_signals": ["data corruption", "inconsistency", "duplicate", "missing records", "ledger", "reconciliation", "balance", "discrepancy", "audit"],
+    "steps": [
+      "Immediately halt batch jobs and any write-heavy processes on affected service.",
+      "Page the data engineering lead and service owner.",
+      "Run the integrity check scripts from the runbook to scope the affected records.",
+      "Identify the time window of corruption (correlate with deployments, migrations).",
+      "If financial data: notify CFO and begin regulatory impact assessment.",
+      "Do NOT attempt in-place data correction without DBA and legal sign-off.",
+      "Begin point-in-time recovery assessment — identify last clean backup.",
+      "Document every action taken with timestamps for audit trail."
+    ],
+    "auto_page_on_match": true,
+    "requires_war_room": true
+  },
+  {
+    "id": "SOP-NETWORK-CONNECTIVITY",
+    "name": "Network Connectivity Loss Response",
+    "applies_to_categories": ["connectivity"],
+    "applies_to_tiers": [1, 2, 3, 4],
+    "keyword_signals": ["network", "connectivity", "unreachable", "packet loss", "DNS", "routing", "VPN", "firewall", "latency spike", "timeout", "connection refused"],
+    "steps": [
+      "Check network monitoring dashboard for affected segments.",
+      "Run traceroute and MTR from multiple vantage points to isolate the fault domain.",
+      "Verify DNS resolution is working correctly for affected services.",
+      "Check firewall and security group rules for recent changes.",
+      "If cloud provider issue: check provider status page and open a support ticket.",
+      "Engage network engineering on-call if fault is internal.",
+      "Test failover paths and activate secondary circuits if available.",
+      "Update status page with connectivity issue and estimated resolution."
+    ],
+    "auto_page_on_match": false,
+    "requires_war_room": false
+  },
+  {
+    "id": "SOP-GENERAL-TRIAGE",
+    "name": "General Incident Triage",
+    "applies_to_categories": ["availability", "performance", "connectivity"],
+    "applies_to_tiers": [3, 4],
+    "keyword_signals": [],
+    "steps": [
+      "Acknowledge the incident and assign an incident commander.",
+      "Gather initial information: what is broken, when did it start, who is affected.",
+      "Check monitoring dashboards and recent alert history.",
+      "Identify the most likely affected service and CI.",
+      "Attempt a first-pass fix (restart, rollback, config revert).",
+      "If not resolved in 30 minutes, escalate to service owner.",
+      "Document all actions taken in the incident record."
+    ],
+    "auto_page_on_match": false,
+    "requires_war_room": false
+  }
+]

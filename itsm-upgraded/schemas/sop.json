@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sop",
+  "title": "StandardOperatingProcedure",
+  "type": "object",
+  "required": ["id", "name", "applies_to_categories", "applies_to_tiers", "steps"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "applies_to_categories": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "applies_to_tiers": {
+      "type": "array",
+      "items": { "type": "integer" }
+    },
+    "keyword_signals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Keywords in title/description that suggest this SOP"
+    },
+    "steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "auto_page_on_match": { "type": "boolean" },
+    "requires_war_room": { "type": "boolean" }
+  }
+}

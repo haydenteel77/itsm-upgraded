@@ -1,0 +1,17 @@
+{
+  "freeze_windows": [
+    {
+      "name": "Q2 close",
+      "start": "2026-06-28T00:00:00Z",
+      "end": "2026-07-02T23:59:59Z",
+      "reason": "Quarter close — finance systems frozen"
+    },
+    {
+      "name": "Black Friday",
+      "start": "2026-11-26T00:00:00Z",
+      "end": "2026-11-30T23:59:59Z",
+      "reason": "Peak shopping period"
+    }
+  ],
+  "last_synced_at": "2026-04-21T06:00:00Z"
+}
